@@ -5,66 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Fake CashApp Balance</title>
 <style>
-  body {
+  /* Reset default margin/padding & remove white bar */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
     background: #00c244;
     color: white;
     font-family: 'Helvetica Neue', sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
-  .container {
-    max-width: 400px;
-    margin: auto;
-  }
-  header {
+    -webkit-font-smoothing: antialiased;
     display: flex;
-    justify-content: flex-end;
-    padding-bottom: 10px;
+    justify-content: center;
+    align-items: center;
   }
-  button.add-user-btn {
-    font-size: 2rem;
-    background: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    line-height: 1;
+
+  #app {
+    background: #00c244;
+    width: 375px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .label {
-    font-size: 1.5rem;
-    opacity: 0.8;
-    margin-bottom: 0.3em;
-    text-align: center;
+
+  .balance-label {
+    font-weight: 500;
+    font-size: 1.6rem;
+    opacity: 0.9;
+    margin-bottom: 10px;
   }
-  .balance {
-    font-size: 4rem;
-    font-weight: bold;
-    margin-bottom: 1em;
-    text-align: center;
+  .balance-amount {
+    font-size: 3.8rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
   }
-  .users-list {
-    margin-bottom: 1em;
-  }
-  .user-item {
-    background: rgba(255 255 255 / 0.2);
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    font-size: 1.2rem;
-  }
+
   .buttons {
     display: flex;
-    gap: 20px;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 15px;
+    margin-bottom: 25px;
   }
   button {
+    flex: 1;
     background: white;
     color: #00c244;
-    border: none;
-    border-radius: 25px;
-    padding: 15px 25px;
+    font-weight: 700;
     font-size: 1.2rem;
-    font-weight: bold;
+    padding: 15px 0;
+    border-radius: 25px;
+    border: none;
     cursor: pointer;
     box-shadow: 0 5px 0 #00832c;
     transition: transform 0.1s ease;
@@ -73,200 +70,213 @@
     transform: translateY(3px);
     box-shadow: none;
   }
+
   .message {
-    margin-top: 20px;
+    min-height: 24px;
     font-size: 1.2rem;
-    min-height: 1.5em;
     opacity: 0;
     transition: opacity 0.3s ease;
     text-align: center;
+    margin-bottom: 15px;
   }
   .message.show {
     opacity: 1;
   }
-  /* Send page styles */
+
+  /* Send Page */
   #sendPage {
+    width: 100%;
     display: none;
-    background: #00832c;
-    padding: 20px;
-    border-radius: 15px;
+    flex-direction: column;
+    align-items: center;
   }
+  #sendPage.active {
+    display: flex;
+  }
+
   label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
+    align-self: flex-start;
+    font-weight: 600;
+    margin-bottom: 6px;
   }
   select, input[type="number"] {
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
     font-size: 1rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #004d00;
   }
-  .send-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
+  select {
+    background: #b2ffb2;
   }
-  .send-buttons button {
-    width: 48%;
+  input[type="number"] {
+    background: #e1ffe1;
+  }
+
+  #backBtn {
+    align-self: flex-start;
+    margin-bottom: 20px;
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 10px 18px;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: none;
+  }
+  #backBtn:active {
+    transform: translateY(2px);
   }
 </style>
 </head>
 <body>
 
-<div class="container" id="mainPage">
-  <header>
-    <button class="add-user-btn" id="addUserBtn" title="Add User">＋</button>
-  </header>
+<div id="app">
+  <!-- Main Page -->
+  <div id="mainPage">
+    <div class="balance-label">CashApp Balance</div>
+    <div class="balance-amount" id="balanceDisplay">$99,999.00</div>
 
-  <div class="label">CashApp Balance</div>
-  <div class="balance" id="balance">$99,999,999,999</div>
+    <div class="buttons">
+      <button id="sendBtn">Send</button>
+      <button id="requestBtn">Request</button>
+      <button id="addCashBtn">Add Cash</button>
+    </div>
 
-  <div class="users-list" id="usersList">
-    <!-- Users will appear here -->
+    <div class="message" id="mainMessage"></div>
   </div>
 
-  <div class="buttons">
-    <button id="sendBtn">Send</button>
-    <button id="requestBtn">Request</button>
-    <button id="addCashBtn">Add Cash</button>
-  </div>
+  <!-- Send Page -->
+  <div id="sendPage">
+    <button id="backBtn">&larr; Back</button>
+    <div class="balance-label" style="margin-bottom: 25px;">Send Money</div>
 
-  <div class="message" id="message"></div>
-</div>
+    <label for="userSelect">Select User</label>
+    <select id="userSelect"></select>
 
-<!-- Send Page -->
-<div class="container" id="sendPage">
-  <div class="label">Send Money</div>
+    <label for="sendAmount">Amount ($)</label>
+    <input id="sendAmount" type="number" min="1" step="0.01" placeholder="Enter amount" />
 
-  <label for="userSelect">Select User:</label>
-  <select id="userSelect"></select>
-
-  <label for="amountInput">Amount ($):</label>
-  <input type="number" id="amountInput" min="1" placeholder="Enter amount" />
-
-  <div class="send-buttons">
     <button id="confirmSendBtn">Send</button>
-    <button id="cancelSendBtn">Cancel</button>
+    <div class="message" id="sendMessage"></div>
   </div>
-
-  <div class="message" id="sendMessage"></div>
 </div>
 
 <script>
-  const messageEl = document.getElementById('message');
-  const sendMessageEl = document.getElementById('sendMessage');
-  const usersListEl = document.getElementById('usersList');
+  // Hardcoded users
+  const users = ['Alice', 'Bob', 'Charlie', 'Diana'];
+
+  // Balance stored as number (cents precision)
+  let balance = 9999900; // $99,999.00 in cents
+
+  // Elements
+  const balanceDisplay = document.getElementById('balanceDisplay');
+  const mainMessage = document.getElementById('mainMessage');
+  const sendMessage = document.getElementById('sendMessage');
+
+  const mainPage = document.getElementById('mainPage');
+  const sendPage = document.getElementById('sendPage');
+
+  const sendBtn = document.getElementById('sendBtn');
+  const requestBtn = document.getElementById('requestBtn');
+  const addCashBtn = document.getElementById('addCashBtn');
+  const backBtn = document.getElementById('backBtn');
+  const confirmSendBtn = document.getElementById('confirmSendBtn');
+
   const userSelect = document.getElementById('userSelect');
-  const amountInput = document.getElementById('amountInput');
-  const balanceEl = document.getElementById('balance');
+  const sendAmountInput = document.getElementById('sendAmount');
 
-  let users = [];
-
-  function showMessage(text, targetEl = messageEl) {
-    targetEl.textContent = text;
-    targetEl.classList.add('show');
-    setTimeout(() => {
-      targetEl.classList.remove('show');
-    }, 2000);
+  // Format balance for display, with commas and 2 decimals
+  function formatBalance(cents) {
+    return `$${(cents / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
   }
 
-  function renderUsers() {
-    usersListEl.innerHTML = '';
-    if(users.length === 0){
-      usersListEl.innerHTML = '<em>No users added yet. Click + to add users.</em>';
-      return;
-    }
-    users.forEach((user, index) => {
-      const div = document.createElement('div');
-      div.className = 'user-item';
-      div.textContent = user;
-      usersListEl.appendChild(div);
-    });
+  // Update displayed balance
+  function updateBalanceDisplay() {
+    balanceDisplay.textContent = formatBalance(balance);
   }
 
-  function renderUserOptions() {
+  // Show messages helper
+  function showMessage(el, text) {
+    el.textContent = text;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  // Populate users in send page select
+  function populateUsers() {
     userSelect.innerHTML = '';
-    if(users.length === 0){
-      const option = document.createElement('option');
-      option.text = 'No users available';
-      option.disabled = true;
-      option.selected = true;
-      userSelect.appendChild(option);
-      return;
-    }
     users.forEach(user => {
       const option = document.createElement('option');
       option.value = user;
-      option.text = user;
+      option.textContent = user;
       userSelect.appendChild(option);
     });
   }
 
-  // Add user flow
-  document.getElementById('addUserBtn').onclick = () => {
-    const newUser = prompt('Enter new user name:');
-    if(newUser && newUser.trim() !== ''){
-      users.push(newUser.trim());
-      renderUsers();
-      showMessage(`User "${newUser.trim()}" added.`);
-    } else {
-      showMessage('User name cannot be empty.');
-    }
-  };
+  // Navigation handlers
+  sendBtn.addEventListener('click', () => {
+    populateUsers();
+    sendAmountInput.value = '';
+    sendMessage.textContent = '';
+    mainPage.style.display = 'none';
+    sendPage.classList.add('active');
+  });
 
-  // Show main page, hide send page
-  function showMainPage(){
-    document.getElementById('mainPage').style.display = 'block';
-    document.getElementById('sendPage').style.display = 'none';
-    sendMessageEl.textContent = '';
-    amountInput.value = '';
-  }
+  backBtn.addEventListener('click', () => {
+    sendPage.classList.remove('active');
+    mainPage.style.display = 'block';
+  });
 
-  // Show send page, hide main page
-  function showSendPage(){
-    if(users.length === 0){
-      showMessage('Add users before sending money.');
+  // Confirm send money
+  confirmSendBtn.addEventListener('click', () => {
+    const user = userSelect.value;
+    const amount = parseFloat(sendAmountInput.value);
+    if (!user) {
+      alert('Please select a user.');
       return;
     }
-    renderUserOptions();
-    document.getElementById('mainPage').style.display = 'none';
-    document.getElementById('sendPage').style.display = 'block';
-  }
-
-  // Button handlers
-  document.getElementById('sendBtn').onclick = showSendPage;
-
-  document.getElementById('requestBtn').onclick = () => {
-    showMessage('Request sent! (Not really) 😉');
-  };
-
-  document.getElementById('addCashBtn').onclick = () => {
-    showMessage('Adding cash... Your balance is infinite! 💸');
-  };
-
-  document.getElementById('cancelSendBtn').onclick = showMainPage;
-
-  document.getElementById('confirmSendBtn').onclick = () => {
-    const selectedUser = userSelect.value;
-    const amount = parseFloat(amountInput.value);
-    if(!selectedUser){
-      showMessage('Please select a user.', sendMessageEl);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount.');
       return;
     }
-    if(isNaN(amount) || amount <= 0){
-      showMessage('Please enter a valid amount.', sendMessageEl);
+    const amountCents = Math.round(amount * 100);
+
+    if (amountCents > balance) {
+      showMessage(sendMessage, `Insufficient funds to send $${amount.toFixed(2)}.`);
       return;
     }
-    // Simulate sending - just show message and go back to main
-    showMessage(`Sent $${amount.toFixed(2)} to ${selectedUser}!`);
-    showMainPage();
-  };
 
-  // Initial render
-  renderUsers();
+    balance -= amountCents;
+    updateBalanceDisplay();
+    showMessage(sendMessage, `Sent $${amount.toFixed(2)} to ${user}! (Not really) 🎉`);
+    sendAmountInput.value = '';
+  });
+
+  // Request button adds money
+  requestBtn.addEventListener('click', () => {
+    // For demo, add $10,000 each request
+    const addCents = 1000000; // $10,000 in cents
+    balance += addCents;
+    updateBalanceDisplay();
+    showMessage(mainMessage, 'Request received! $10,000 added! (Not really) 😉');
+  });
+
+  // Add Cash button adds money
+  addCashBtn.addEventListener('click', () => {
+    const addCents = 5000000; // $50,000 in cents
+    balance += addCents;
+    updateBalanceDisplay();
+    showMessage(mainMessage, 'Cash added! $50,000 added! 💸');
+  });
+
+  // Initialize
+  updateBalanceDisplay();
+
 </script>
 
 </body>
