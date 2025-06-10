@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fake CashApp Balance</title>
+<style>
+  body {
+    background: #00c244;
+    color: white;
+    font-family: 'Helvetica Neue', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+  .label {
+    font-size: 1.5rem;
+    opacity: 0.8;
+    margin-bottom: 0.3em;
+  }
+  .balance {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+  .buttons {
+    display: flex;
+    gap: 20px;
+  }
+  button {
+    background: white;
+    color: #00c244;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #00832c;
+    transition: transform 0.1s ease;
+  }
+  button:active {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
+  .message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    min-height: 1.5em;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .message.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+  <div class="label">CashApp Balance</div>
+  <div class="balance">$99,999,999,999</div>
+
+  <div class="buttons">
+    <button id="sendBtn">Send</button>
+    <button id="requestBtn">Request</button>
+    <button id="addCashBtn">Add Cash</button>
+  </div>
+
+  <div class="message" id="message"></div>
+
+<script>
+  const messageEl = document.getElementById('message');
+
+  function showMessage(text) {
+    messageEl.textContent = text;
+    messageEl.classList.add('show');
+    setTimeout(() => {
+      messageEl.classList.remove('show');
+    }, 2000);
+  }
+
+  document.getElementById('sendBtn').onclick = () => {
+    showMessage('Sending money... Just kidding! 😄');
+  };
+
+  document.getElementById('requestBtn').onclick = () => {
+    showMessage('Request sent! (Not really) 😉');
+  };
+
+  document.getElementById('addCashBtn').onclick = () => {
+    showMessage('Adding cash... Your balance is infinite! 💸');
+  };
+</script>
+
+</body>
+</html>
