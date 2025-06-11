@@ -2,163 +2,147 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cash App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cash App Style</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #ffffff;
-      color: black;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #00c244;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
       height: 100vh;
+      padding: 20px;
     }
 
-    .top-balance {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .currency-selector {
-      margin-bottom: 10px;
-    }
-
-    .currency-selector select {
-      font-size: 16px;
-      padding: 5px 10px;
-    }
-
-    .amount-display {
-      font-size: 48px;
+    .amount {
+      font-size: 64px;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    .currency {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 5px 15px;
+      font-size: 16px;
+      margin-bottom: 30px;
     }
 
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      max-width: 300px;
+      gap: 15px;
       width: 100%;
-      margin-bottom: 20px;
+      max-width: 300px;
+      margin-bottom: 30px;
     }
 
     .keypad button {
       font-size: 24px;
-      padding: 20px;
-      background: #f2f2f2;
+      padding: 20px 0;
       border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .keypad button:active {
-      background: #ddd;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
     }
 
     .actions {
       display: flex;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 300px;
       gap: 10px;
+      margin-bottom: 20px;
     }
 
     .actions button {
       flex: 1;
       padding: 15px;
       font-size: 18px;
-      font-weight: bold;
       border: none;
-      border-radius: 12px;
-      cursor: pointer;
+      border-radius: 30px;
+      background: white;
+      color: #00c244;
+      font-weight: bold;
+    }
+
+    .bottom-bar {
+      position: absolute;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
       color: white;
+      font-size: 24px;
     }
 
-    .pay-btn {
-      background-color: #00c244;
-    }
-
-    .request-btn {
-      background-color: #333;
+    .bottom-bar div {
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
 
-  <div class="top-balance">Available Balance: $2,000.00</div>
+  <div class="amount" id="amountDisplay">$0</div>
 
-  <div class="currency-selector">
-    <select id="currency">
-      <option value="USD">$ USD</option>
-      <option value="BTC">₿ BTC</option>
-    </select>
-  </div>
-
-  <div class="amount-display" id="amountDisplay">$0</div>
+  <div class="currency" id="currency">USD ▼</div>
 
   <div class="keypad">
-    <button onclick="appendNumber('1')">1</button>
-    <button onclick="appendNumber('2')">2</button>
-    <button onclick="appendNumber('3')">3</button>
-    <button onclick="appendNumber('4')">4</button>
-    <button onclick="appendNumber('5')">5</button>
-    <button onclick="appendNumber('6')">6</button>
-    <button onclick="appendNumber('7')">7</button>
-    <button onclick="appendNumber('8')">8</button>
-    <button onclick="appendNumber('9')">9</button>
-    <button onclick="appendNumber('.')">.</button>
-    <button onclick="appendNumber('0')">0</button>
-    <button onclick="deleteLast()">⌫</button>
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button onclick="press('.')">.</button>
+    <button onclick="press('0')">0</button>
+    <button onclick="backspace()">⌫</button>
   </div>
 
   <div class="actions">
-    <button class="pay-btn" onclick="pay()">Pay</button>
-    <button class="request-btn" onclick="request()">Request</button>
+    <button onclick="request()">Request</button>
+    <button onclick="pay()">Pay</button>
+  </div>
+
+  <div class="bottom-bar">
+    <div>$130</div>
+    <div>💵</div>
+    <div>💲</div>
+    <div>🔍</div>
+    <div>🕒</div>
   </div>
 
   <script>
     let amount = '';
 
     function updateDisplay() {
-      const currency = document.getElementById('currency').value;
-      let symbol = currency === 'USD' ? '$' : '₿';
-      let shown = amount || '0';
-      document.getElementById('amountDisplay').textContent = symbol + shown;
+      document.getElementById('amountDisplay').textContent = '$' + (amount || '0');
     }
 
-    function appendNumber(num) {
-      if (num === '.' && amount.includes('.')) return;
-      amount += num;
+    function press(val) {
+      if (val === '.' && amount.includes('.')) return;
+      amount += val;
       updateDisplay();
     }
 
-    function deleteLast() {
+    function backspace() {
       amount = amount.slice(0, -1);
       updateDisplay();
     }
 
     function pay() {
-      alert('Paying ' + document.getElementById('amountDisplay').textContent);
+      alert('Pretending to pay: $' + (amount || '0'));
     }
 
     function request() {
-      alert('Requesting ' + document.getElementById('amountDisplay').textContent);
+      alert('Pretending to request: $' + (amount || '0'));
     }
 
-    document.getElementById('currency').addEventListener('change', updateDisplay);
     updateDisplay();
   </script>
-
 </body>
 </html>
