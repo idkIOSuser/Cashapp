@@ -3,117 +3,168 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cash App Style</title>
+  <title>Cash App Clone</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #00c244;
+      background-color: #00c244;
       color: white;
+      height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      height: 100vh;
-      padding: 20px;
     }
 
     .amount {
       font-size: 64px;
       font-weight: bold;
-      margin-top: 30px;
-      margin-bottom: 10px;
+      margin-top: 100px;
     }
 
-    .currency {
-      background: rgba(255, 255, 255, 0.1);
+    .currency-select {
+      background: rgba(255,255,255,0.2);
       border-radius: 20px;
-      padding: 5px 15px;
+      padding: 6px 14px;
       font-size: 16px;
-      margin-bottom: 30px;
+      margin: 10px auto 30px;
     }
 
     .keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
-      width: 100%;
       max-width: 300px;
-      margin-bottom: 30px;
+      width: 100%;
+      padding: 0 20px;
     }
 
     .keypad button {
-      font-size: 24px;
-      padding: 20px 0;
+      font-size: 28px;
+      padding: 18px 0;
+      background: rgba(255,255,255,0.1);
       border: none;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
       color: white;
+      font-weight: 600;
     }
 
     .actions {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      justify-content: space-around;
+      gap: 15px;
+      margin: 25px 0;
+      padding: 0 20px;
+      width: 100%;
+      max-width: 400px;
     }
 
     .actions button {
       flex: 1;
-      padding: 15px;
-      font-size: 18px;
-      border: none;
-      border-radius: 30px;
       background: white;
       color: #00c244;
       font-weight: bold;
+      font-size: 18px;
+      border: none;
+      border-radius: 32px;
+      padding: 14px 0;
     }
 
-    .bottom-bar {
-      position: absolute;
-      bottom: 10px;
+    .bottom-nav {
       display: flex;
       justify-content: space-around;
       width: 100%;
-      color: white;
+      padding: 12px 0;
+      background: rgba(0, 0, 0, 0.1);
       font-size: 24px;
+      position: relative;
     }
 
-    .bottom-bar div {
-      opacity: 0.9;
+    .tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      opacity: 0.8;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .tab.active {
+      opacity: 1;
+    }
+
+    .screen {
+      display: none;
+      flex-grow: 1;
+      width: 100%;
+      padding-top: 20px;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
 
-  <div class="amount" id="amountDisplay">$0</div>
+  <!-- Send screen -->
+  <div class="screen active" id="sendScreen">
+    <div class="amount" id="amountDisplay">$0</div>
+    <div class="currency-select">USD ▼</div>
 
-  <div class="currency" id="currency">USD ▼</div>
+    <div class="keypad">
+      <button onclick="press('1')">1</button>
+      <button onclick="press('2')">2</button>
+      <button onclick="press('3')">3</button>
+      <button onclick="press('4')">4</button>
+      <button onclick="press('5')">5</button>
+      <button onclick="press('6')">6</button>
+      <button onclick="press('7')">7</button>
+      <button onclick="press('8')">8</button>
+      <button onclick="press('9')">9</button>
+      <button onclick="press('.')">.</button>
+      <button onclick="press('0')">0</button>
+      <button onclick="backspace()">⌫</button>
+    </div>
 
-  <div class="keypad">
-    <button onclick="press('1')">1</button>
-    <button onclick="press('2')">2</button>
-    <button onclick="press('3')">3</button>
-    <button onclick="press('4')">4</button>
-    <button onclick="press('5')">5</button>
-    <button onclick="press('6')">6</button>
-    <button onclick="press('7')">7</button>
-    <button onclick="press('8')">8</button>
-    <button onclick="press('9')">9</button>
-    <button onclick="press('.')">.</button>
-    <button onclick="press('0')">0</button>
-    <button onclick="backspace()">⌫</button>
+    <div class="actions">
+      <button onclick="request()">Request</button>
+      <button onclick="pay()">Pay</button>
+    </div>
   </div>
 
-  <div class="actions">
-    <button onclick="request()">Request</button>
-    <button onclick="pay()">Pay</button>
-  </div>
+  <!-- Placeholder tabs -->
+  <div class="screen" id="cardScreen"><p style="margin-top: 100px;">💳 Cash Card screen (coming soon)</p></div>
+  <div class="screen" id="searchScreen"><p style="margin-top: 100px;">🔍 Search screen (coming soon)</p></div>
+  <div class="screen" id="clockScreen"><p style="margin-top: 100px;">🕒 Activity screen (coming soon)</p></div>
 
-  <div class="bottom-bar">
-    <div>$130</div>
-    <div>💵</div>
-    <div>💲</div>
-    <div>🔍</div>
-    <div>🕒</div>
+  <!-- Bottom nav -->
+  <div class="bottom-nav">
+    <div class="tab active" onclick="switchTab('sendScreen', this)">
+      <div>💲</div>
+    </div>
+    <div class="tab" onclick="switchTab('cardScreen', this)">
+      <div>💳</div>
+    </div>
+    <div class="tab" onclick="switchTab('searchScreen', this)">
+      <div>🔍</div>
+    </div>
+    <div class="tab" onclick="switchTab('clockScreen', this)">
+      <div>🕒</div>
+    </div>
   </div>
 
   <script>
@@ -135,11 +186,19 @@
     }
 
     function pay() {
-      alert('Pretending to pay: $' + (amount || '0'));
+      alert("Paying: $" + (amount || '0'));
     }
 
     function request() {
-      alert('Pretending to request: $' + (amount || '0'));
+      alert("Requesting: $" + (amount || '0'));
+    }
+
+    function switchTab(screenId, tabElement) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tabElement.classList.add('active');
     }
 
     updateDisplay();
